@@ -28,10 +28,13 @@ function draw() {
     }
 
     current.visited = true;
+    current.highlight();
+
     var next = current.checkNeighbors();
 
     if (next) {
         next.visited = true;
+        removeWalls(current, next);
         current = next;
     }
 }
@@ -49,6 +52,7 @@ function Cell(i, j) {
     this.j = j;
     this.walls = [true, true, true, true];
     this.visited = false;
+
 
     this.checkNeighbors = function() {
         var neighbors = [];
@@ -83,6 +87,17 @@ function Cell(i, j) {
 
     }
 
+    this.highlight = function() {
+        var x = this.i*w;
+        var y = this.j*w;
+        noStroke();
+        fill(0, 0, 255, 100);
+        rect(x, y, w, w);
+
+
+
+    }
+
     this.show = function() {
         var x = this.i*w;
         var y = this.j*w;
@@ -104,13 +119,33 @@ function Cell(i, j) {
         }
 
         if (this.visited) {
-          fill(255,0,255,100);
-          rect(x,y,w,w);
+            noStroke();
+            fill(255,0,255,100);
+            rect(x,y,w,w);
         }
 
-        // noFill();
-        // rect(x,y,w,w);
     }
 
+
+}
+
+function removeWalls(a, b) {
+    var x = a.i - b.i;
+    if (x === 1) {
+        a.walls[3] = false;
+        b.walls[1] = false;
+    } else if (x === -1) {
+        a.walls[1] = false;
+        b.walls[3] = false;
+    }
+
+    var y = a.j - b.j;
+    if (y === 1) {
+        a.walls[0] = false;
+        b.walls[2] = false;
+    } else if (y === -1) {
+        a.walls[2] = false;
+        b.walls[0] = false;
+    }
 
 }
