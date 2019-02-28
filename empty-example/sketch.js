@@ -2,6 +2,7 @@
 var cols, rows;
 var w = 40;
 var grid = [];
+var stack = [];
 var current;
 
 function setup() {
@@ -34,8 +35,12 @@ function draw() {
 
     if (next) {
         next.visited = true;
+        stack.push(current);
         removeWalls(current, next);
         current = next;
+    } else if (stack.length > 0) {
+        // We're stuck!
+        current = stack.pop();
     }
 }
 
